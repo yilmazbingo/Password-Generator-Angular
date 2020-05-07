@@ -10,3 +10,6 @@
 #### property binding syntax
   <input type="text" [value]="password" />
    whenever password value changes Angular detects it. 
+- in Angular we use `input` event instead of onChange in React to handle the changing input texts. they both are using the "input" event of vanilla js behind the scene.
+
+       <input type="text" (input)="onChangeLength($event.target.value)" />
