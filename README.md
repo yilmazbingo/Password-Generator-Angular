@@ -1,4 +1,4 @@
-### REACT SYNTAX vs ANGULAR SYNTAX
+          ### REACT SYNTAX vs ANGULAR SYNTAX
 
 - we have class based components. all the event handlers will be generated here:
 - html here is called angular template syntax. this is what jsx in react.
@@ -45,5 +45,18 @@ Attribute Directives changes the properties of the HTML element it gets applied 
 - "assets" is the folder that shipped with Angular. this is where store our publicly available files. in next.js it is "public" folder. In webpack and express we name this directory.
 
 - For each component, we will have our own css files and in this css we can target only that component's elements or classes. 
+
+#### comparing two strings (typing app)
+- *ngFor directive is used in the arrays. That is why we need to convert it to the array with split(""). 
+- instead of writing the starting text into one block, put each letter into a span so we can easily style it
+   
+     <p class="has-text-centered">
+        <span
+          [class]="compare(letter, enteredText[i])"
+          *ngFor="let letter of randomText.split(''); let i = index"
+        >
+          {{ letter }}
+        </span>
+      </p>
 
 
