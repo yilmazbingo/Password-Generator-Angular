@@ -1,0 +1,68 @@
+<div class="container">
+  <h3 class="title has-text-centered">Payment Form</h3>
+
+  <div class="columns is-centered">
+    <div class="box column is-one-third">
+      <div class="field">
+        <label>Payee Name</label>
+        <input
+          class="input"
+          (input)="onNameChange($event.target.value)"
+          type="text"
+        />
+      </div>
+    </div>
+    <div class="box column is-one-third">
+      <div class="field">
+        <label for=""><b>Name</b></label>
+        <div>{{ name | titlecase }}</div>
+      </div>
+    </div>
+  </div>
+  <div class="columns is-centered">
+    <div class="box column is-one-third">
+      <div class="field">
+        <label>Payent Date</label>
+        <input
+          class="input"
+          (input)="onDateChange($event.target.value)"
+          type="date"
+        />
+      </div>
+    </div>
+    <div class="box column is-one-third">
+      <div class="field">
+        <label for=""><b>Date</b></label>
+        <div>{{ date | date: "MMMM d, y" }}</div>
+      </div>
+    </div>
+  </div>
+  <div class="columns is-centered">
+    <div class="box column is-one-third">
+      <div class="field">
+        <label>Payent Amount</label>
+        <input class="input" (input)="onAmountChange($event.target.value)" />
+      </div>
+    </div>
+    <div class="box column is-one-third">
+      <div class="field">
+        <label for=""><b>Payment</b></label>
+        <div>{{ amount | currency: "JPY" }}</div>
+      </div>
+    </div>
+  </div>
+  <div class="columns is-centered">
+    <div class="box column is-one-third">
+      <div class="field">
+        <label>Miles</label>
+        <input class="input" (input)="onMilesChange($event.target.value)" />
+      </div>
+    </div>
+    <div class="box column is-one-third">
+      <div class="field">
+        <label for=""><b>Kilometers</b></label>
+        <div>{{ miles | convert: "m" }}</div>
+      </div>
+    </div>
+  </div>
+</div>
