@@ -2,13 +2,13 @@
           
   #### 5 different projects to compare react.js syntax and angular syntax. 
   each route refers to a different app
-  const routes: Routes = [
   
-  { path: 'cards', component: CardsComponent },
-  { path: 'typing', component: TypingComponent },
-  { path: 'pipes', component: PipesComponent },
-  { path: 'directive', component: DirectiveComponent },
-];
+    const routes: Routes = [
+    { path: 'cards', component: CardsComponent },
+    { path: 'typing', component: TypingComponent },
+    { path: 'pipes', component: PipesComponent },
+    { path: 'directive', component: DirectiveComponent },
+    ];
 
 - we have class based components. all the event handlers will be generated here:
 - html here is called angular template syntax. this is what jsx in react.
