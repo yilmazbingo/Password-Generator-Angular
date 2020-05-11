@@ -58,5 +58,117 @@ Attribute Directives changes the properties of the HTML element it gets applied 
           {{ letter }}
         </span>
       </p>
+      
+- pipes are just small functions to alter data for use in template.
+- there is no Angular-like pipes in react.js
+- we can create our own custom pipes:
+  
+  import { Pipe, PipeTransform } from '@angular/core';
+
+          @Pipe({
+            name: 'convert',
+          })
+          export class ConvertPipe implements PipeTransform {
+            trasform(value: any, ...args: any[]): any {
+              return value * 1.60934;
+            }
+          }
+  - anytime we use a pipe, its transform function will be invoked. this pipe just converts miles to km. in order to use this pipe we have to register it to the app.module.ts declarations[].
+  - if we pass an argument it will be passed to the args[]. 
+  
+        export class ConvertPipe implements PipeTransform {
+        transform(value: any, targetUnit: string): any {
+          if (!value) return null;
+          switch (targetUnit) {
+            case 'km':
+              return value * 1.60934;
+            case 'm':
+              return value * 1609.34;
+            default:
+              return value;
+          }
+        }
+        
+   - we can use pipes inside *ngIf as follow
+        *ngIf="(miles | convert:"km")>10"
+
+### Directives
+
+- Can be used to modify the structure or properties for HTML elements. 
+       
+       <a
+        href="{{ image.url }}"
+        class="pagination-link"
+        [ngClass]="{ 'is-current': i === currentPage }"
+        >{{ i + 1 }}
+      </a>
+      
+  [ngClass] will check if the condition is true, then will add that classname to the class, if not will not do anything. {} refers to object. 
+  - conditionally setting an attribute in angular.
+          [attr.disabled]="currentPage === 0 ? true : false"
+
+- In react.js if we are linking the user to outside of the app, we use anchor tag otherwise we use Link compoennt.
+- `*ng` refers to structural directive which changes the structure of HTML. both *ngFor and *ngIf are structural directives. we can only apply one structural directive to any given element. 
+- `ng-container` does not create an HTML element. it exist solely so we can apply extra structural directives. 
+
+       <ng-container *ngFor="let image of images; let i = index">
+            <li class="">
+              <a
+                (click)="currentPage = i"
+                class="pagination-link"
+                [ngClass]="{ 'is-current': i === currentPage }"
+                >{{ i + 1 }}
+              </a>
+            </li>
+          </ng-container>
+          
+ - angular will process the *ngFor but it will not display anyhting for ng-container. instead it is just going to take whatever contents are in this case it is <li></li> and will show that inside our template. 
+ - ng-container is like React.Fragment
+ - we cannot use Math inside the template.
+ 
+       <div [ngSwitch]="currentPage">
+        <div *ngSwitchCase="0">currentpage is zero</div>
+        </div>
+ - currentPage = 0, it will display the child element. 
+ 
+ #### Generating Custom Directives
+ 
+       import { Directive } from '@angular/core';
+
+      //this is decorator
+      // [] in selector means you make use of this directive, we are going to add the word addCLass as an attribute on some element inside of template
+      @Directive({
+        selector: '[appClass]',
+      })
+      export class ClassDirective {
+        constructor() {
+          console.log('class directive is used');
+        }
+      }
+      
+  - we have to register this to the app.modules declarations array. I will use this directive to apply a bg color to whatever element,we apply the directive to.
+     
+      import {ElementRef} from "@angular/core"
+      @Directive({
+        selector: '[appClass]',
+      })
+      export class ClassDirective {
+        constructor(private element: ElementRef) {
+          console.log('class directive is used');
+        }
+      }
+
+- as soon as we add `element` argument to the constructor, Angular will make sure that whenever we create an instance of class directive, a first argument to the constructor is going to be the element that we applied the directive to. then "element" a direct reference to that html element. We can access a HTML element. 
+   we have to be aware of `this.element` is not the actual element. 
+   `this.element.nativeElement` 
+   
+  - Communicating from parent component to child component.
+   When it comes to passing data from parent to child component we use property binding in Angular. In this case, we send the data from the parent component to the child component using an attribute. This attribute can then be accessed within the child component using the @input decorator. in React this is done by `props`.
+   - Communicate information into a directive we are gonna use the property binding syntax.
+   - when angular sees appClass it will create an instance of ClassDirective. that means we are going to run all the code inside the constructor. as soon as we run the constructor, 
+   - Directives are treated by Angular similarly how normal components are treated. behind the scenes, whenever anglar starts to parse our template, it sees the `appClass` directive. it will then create an instance of the matching class. then it sees
+   `[backgroundColor]=" ` red`"` not angular assumes that there is backgroundColor property set in directive class. so angular needs to detect that `backgroundColor` property set. we use a feature of typescript.
+   
+
 
 
