@@ -1,4 +1,14 @@
           ### REACT SYNTAX vs ANGULAR SYNTAX
+          
+  #### 5 different projects to compare react.js syntax and angular syntax. 
+  each route refers to a different app
+  const routes: Routes = [
+  
+  { path: 'cards', component: CardsComponent },
+  { path: 'typing', component: TypingComponent },
+  { path: 'pipes', component: PipesComponent },
+  { path: 'directive', component: DirectiveComponent },
+];
 
 - we have class based components. all the event handlers will be generated here:
 - html here is called angular template syntax. this is what jsx in react.
@@ -166,9 +176,71 @@ Attribute Directives changes the properties of the HTML element it gets applied 
    When it comes to passing data from parent to child component we use property binding in Angular. In this case, we send the data from the parent component to the child component using an attribute. This attribute can then be accessed within the child component using the @input decorator. in React this is done by `props`.
    - Communicate information into a directive we are gonna use the property binding syntax.
    - when angular sees appClass it will create an instance of ClassDirective. that means we are going to run all the code inside the constructor. as soon as we run the constructor, 
-   - Directives are treated by Angular similarly how normal components are treated. behind the scenes, whenever anglar starts to parse our template, it sees the `appClass` directive. it will then create an instance of the matching class. then it sees
+   - Directives are treated by Angular similarly how normal components are treated. behind the scenes, when angular starts to parse our template, it sees the `appClass` directive. it will then create an instance of the matching class. then it sees
    `[backgroundColor]=" ` red`"` not angular assumes that there is backgroundColor property set in directive class. so angular needs to detect that `backgroundColor` property set. we use a feature of typescript.
    
+   - in our current implementation we are using both `appClass` and [backgroundColor]. instead we could do this:
+   
+        @Input() set appClass(color: string) {
+        this.element.nativeElement.style.backgroundColor = color; }
+     in our html element
+     
+           <h4  [appClass]="'red'">{{ images[currentPage].title }}</h4>
+
+- for the sake of readability, this does not look good. because we have to explicitly mention on what we are working on.  we can keep the html element as it is then we can alter the code in the class directive:
+    
+            @Input('appClass') set backgroundColor(color: string) {
+              this.element.nativeElement.style.backgroundColor = color;
+               }
+   
+ #### Replacing ngClass
+ -instead of changing background color, we focus on the class name, means that we write our ngClass directive.
+ 
+     @Input('appClass') set className(classObj: any) {
+        for (let key in classObj) {
+          if (classObj[key]) {
+            this.element.nativeElement.classList.add(key);
+          } else {
+            this.element.nativeElement.classList.remove(key);
+          }
+        }
+      }
+      
+  now we can replace [ngClass] with [appClass]
+
+#### Custom Structural Directives:
+
+- so far we used *ngFor and *ngIf. they are structual directives.
+
+        import { Directive, TemplateRef, ViewContainerRef, Input } from '@angular/core';
+
+        //we use TemplateREf and ViewContainerRef to customize th arguments that are accepted into our constructor
+        //viewContainer is ref to the element that we applied our directive to. it is kinda custom version of ElementRef.
+        //it gives us the ability to easily add in more elements or remove elements or essentially render some templates inside there.
+        //TemplateRef is reference to elements are placed inside of the element that we applied our directive to.
+        @Directive({ selector: '[appTimes]' })
+        export class TimesDirective {
+          constructor(
+            private viewContainer: ViewContainerRef,
+            private templateRef: TemplateRef<any>
+          ) {}
+
+          //whenever angular sees the 'appTimes' we are going to run follwoing function
+          @Input('appTimes') set render(times: number) {
+            //we clear out any elements that are currently inside of viewContainer
+            this.viewContainer.clear();
+
+            for (let i = 0; i < times; i++) {
+              this.viewContainer.createEmbeddedView(this.templateRef, {});
+            }
+          }
+        }
+        
+     this can be replaced with *ngFor. *ngFor is like iterating array with array.map() in React.js.
+     - {} object that we passed into the `this.viewContainer.createEmbeddedView(this.templateRef, {})` referred to as **context**. we can add different properties in here. it will make some different values accessible inside of our template through our directive. so if we add **{index:i ,}** we can use it in the template. 
+            `<ng-container *ngFor="images.length; let i = index">`
+
+     `
 
 
 
